@@ -1,0 +1,5 @@
+pistas_padel.settings:
+  title: 'Pistas Padel'
+  description: 'Calendario de reserva de pistas de padel.'
+  route_name: pistas_padel.settings
+  parent: system.admin_config_system

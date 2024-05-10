@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.padel_court_reservation.field_date_and_time
+    - field.field.node.padel_court_reservation.field_minutes
+    - field.field.node.padel_court_reservation.field_padel_courts
+    - field.field.node.padel_court_reservation.field_status
+    - node.type.padel_court_reservation
+  module:
+    - user
+id: node.padel_court_reservation.teaser
+targetEntityType: node
+bundle: padel_court_reservation
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_date_and_time: true
+  field_minutes: true
+  field_padel_courts: true
+  field_status: true

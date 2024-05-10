@@ -1,0 +1,14 @@
+.base-reserve-btn {
+  padding: 7px 23px;
+  margin: 0;
+  text-decoration: none;
+}
+.available {
+  background: green;
+}
+.locked {
+  background: gray;
+}
+.noavailable {
+  background: yellow;
+}

@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_padel_courts
+    - node.type.padel_court_reservation
+    - taxonomy.vocabulary.tags
+id: node.padel_court_reservation.field_padel_courts
+field_name: field_padel_courts
+entity_type: node
+bundle: padel_court_reservation
+label: 'Padel courts'
+description: 'Relationship with the reserved track. Clue is a taxonomy term.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      tags: tags
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

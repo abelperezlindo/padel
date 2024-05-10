@@ -1,0 +1,6 @@
+name: Pistas de paddel
+description: Calendario de reserva de pistas de padel.
+configure: pistas_padel.settings
+package: Custom
+type: module
+core_version_requirement: ^10

@@ -1,0 +1,33 @@
+pistas_padel.settings:
+  path: '/admin/config/pistas-padel/settings'
+  defaults:
+    _form: '\Drupal\pistas_padel\Form\SettingsForm'
+    _title: 'Pistas padel config form'
+  requirements:
+    _permission: 'administer site configuration'
+
+pistas_padel.calendar:
+  path: '/admin/config/pistas-padel/calendar'
+  defaults:
+    _form: '\Drupal\pistas_padel\Form\CalendarForm'
+    _title: 'Calendar'
+  requirements:
+    _permission: 'permission to reserve paddle tennis courts'
+
+pistas_padel.reserve:
+  path: pistas-padel/reserve/{pista}/{date}/{hour}/{min}
+  defaults:
+    _controller: '\Drupal\pistas_padel\Controller\CalendarController::reserve'
+    _title: 'reserve'
+  options:
+    parameters:
+      pista:
+        type: entity:taxonomy_term
+      date:
+        type: string
+      hour:
+        type: string
+      min:
+        type: string
+  requirements:
+    _permission: 'permission to reserve paddle tennis courts'
