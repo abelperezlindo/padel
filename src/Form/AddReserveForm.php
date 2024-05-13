@@ -69,6 +69,10 @@ class AddReserveForm extends ConfirmFormBase {
     // Create a new node object.
     $config = $this->config(static::SETTINGS);
     $duration = $config->get('tranche_duration');
+    $params = [
+      'date' => $this->datetime->format('Y-m-d'),
+    ];
+
     $node = Node::create([
       'type' => $this::BOOKING_BUNDLE,
       'title' => 'The user ' . $user->getDisplayName() . ' has reserved ' . $this->term->getName(),
@@ -76,6 +80,8 @@ class AddReserveForm extends ConfirmFormBase {
     ]);
     $reserved = $this->getNodeReservation($this->term->tid->value, $this->datetime->format('Y-m-d H:i:00'));
     if ($reserved !== FALSE) {
+      \Drupal::messenger()->addWarning($this->t('This track has already been reserved at the selected time'));
+      $form_state->setRedirect($this->return, $params);
       return;
     }
 
@@ -85,9 +91,6 @@ class AddReserveForm extends ConfirmFormBase {
     $node->set('field_status', 'reserved');
     // Save the node.
     $node->save();
-    $params = [
-      'date' => $this->datetime->format('Y-m-d'),
-    ];
     $form_state->setRedirect($this->return, $params);
   }
 
@@ -102,14 +105,21 @@ class AddReserveForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return new Url('<front>');
+    return new Url($this->return);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescription() {
+    return $this->t('Do you want to confirm the reservation?');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Confirm?');
+    return $this->t('Confirm');
   }
 
   /**
