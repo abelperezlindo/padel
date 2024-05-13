@@ -31,7 +31,7 @@ class CalendarController extends ControllerBase {
   /**
    * Returns a modal.
    */
-  public function reserve(Term $pista = NULL, string $date = '', string $hour = '', string $min = '') {
+  public function reserve(Term $pista = NULL, string $date = '', string $hour = '', string $min = '', $return = '') {
     if (empty($pista) || empty($date) || empty($hour) || empty($min)) {
       return [];
     }
@@ -71,7 +71,7 @@ class CalendarController extends ControllerBase {
     ];
 
     if (empty($reserva) && !$block_hour) {
-      $content['confirm-form'] = \Drupal::formBuilder()->getForm('Drupal\pistas_padel\Form\AddReserveForm', $pista, $datetime);
+      $content['confirm-form'] = \Drupal::formBuilder()->getForm('Drupal\pistas_padel\Form\AddReserveForm', $pista, $datetime, $return);
     }
     else {
       $content['body'] = [

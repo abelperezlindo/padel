@@ -44,9 +44,15 @@ class CalendarForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config(static::SETTINGS);
     $date = new DrupalDateTime('now');
+    $request = \Drupal::request()->query->all();
+    /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     if ($form_state->getValue('selected-date')) {
       $date = $form_state->getValue('selected-date');
     }
+    elseif (!empty($request['date'])) {
+      $date = new DrupalDateTime($request['date']);
+    }
+
     $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
     $form['#attached']['library'][] = 'pistas_padel/pistas_padel.styles';
 
@@ -120,6 +126,7 @@ class CalendarForm extends FormBase {
             'date' => $date->format('Y-m-d'),
             'hour' => str_pad($base_hour, 2, '0', STR_PAD_LEFT),
             'min' => str_pad($base_minutes, 2, '0', STR_PAD_LEFT),
+            'return' => \Drupal::routeMatch()->getRouteName(),
           ];
           $datetime_str = $parameters['date'] . ' ' . $parameters['hour'] . ':' . $parameters['min'] . ':00';
           $node = $this->getNodeReservation($tid, $datetime_str);

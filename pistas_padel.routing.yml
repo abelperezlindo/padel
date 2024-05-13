@@ -15,7 +15,7 @@ pistas_padel.calendar:
     _permission: 'permission to reserve paddle tennis courts'
 
 pistas_padel.reserve:
-  path: pistas-padel/reserve/{pista}/{date}/{hour}/{min}
+  path: pistas-padel/reserve/{pista}/{date}/{hour}/{min}/{return}
   defaults:
     _controller: '\Drupal\pistas_padel\Controller\CalendarController::reserve'
     _title: 'reserve'
@@ -28,6 +28,8 @@ pistas_padel.reserve:
       hour:
         type: string
       min:
+        type: string
+      return:
         type: string
   requirements:
     _permission: 'permission to reserve paddle tennis courts'

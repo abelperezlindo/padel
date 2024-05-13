@@ -44,11 +44,19 @@ class AddReserveForm extends ConfirmFormBase {
   protected $datetime;
 
   /**
+   * Return route name.
+   *
+   * @var string
+   */
+  protected $return;
+
+  /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, Term $term = NULL, DrupalDateTime $datetime = NULL, $return = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, Term $term = NULL, DrupalDateTime $datetime = NULL, $return = '<front>') {
     $this->term = $term;
     $this->datetime = $datetime;
+    $this->return = $return;
 
     return parent::buildForm($form, $form_state);
   }
@@ -77,8 +85,10 @@ class AddReserveForm extends ConfirmFormBase {
     $node->set('field_status', 'reserved');
     // Save the node.
     $node->save();
-
-    $form_state->setRedirect('<front>');
+    $params = [
+      'date' => $this->datetime->format('Y-m-d'),
+    ];
+    $form_state->setRedirect($this->return, $params);
   }
 
   /**
