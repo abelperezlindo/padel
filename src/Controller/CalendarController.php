@@ -44,7 +44,19 @@ class CalendarController extends ControllerBase {
     $reserva = $this->getNodeReservation($pista, $datetime);
     $body = '';
 
-    if (empty($reserva)) {
+    $dayOfWeek = (int) $datetime->format('w');
+    $not_from = (int) $config->get('not_available_from_' . $dayOfWeek);
+    $not_to = (int) $config->get('not_available_to_' . $dayOfWeek);
+    $block_hour = FALSE;
+    $hour = (int) $datetime->format('H');
+    if (!empty($not_from) && !empty($not_to) && ($not_from <= (int) $hour &&  $hour <= $not_to)) {
+      $block_hour = TRUE;
+    }
+
+    if ($block_hour) {
+      $body = $config->get('text_bloked');
+    }
+    elseif (empty($reserva)) {
       $body = $config->get('text_available');
     }
     elseif ($reserva->field_status->first()->value == 'locked') {
@@ -58,7 +70,7 @@ class CalendarController extends ControllerBase {
       '#type' => 'container',
     ];
 
-    if (empty($reserva)) {
+    if (empty($reserva) && !$block_hour) {
       $content['confirm-form'] = \Drupal::formBuilder()->getForm('Drupal\pistas_padel\Form\AddReserveForm', $pista, $datetime);
     }
     else {

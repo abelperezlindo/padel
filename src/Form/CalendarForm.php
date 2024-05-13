@@ -80,6 +80,9 @@ class CalendarForm extends FormBase {
 
     $opening = (int) $config->get('opening_time_' . $dayOfWeek);
     $closing = (int) $config->get('closing_time_' . $dayOfWeek);
+    $not_from = (int) $config->get('not_available_from_' . $dayOfWeek);
+    $not_to = (int) $config->get('not_available_to_' . $dayOfWeek);
+
     $hours = -$opening + $closing;
 
     $minutes_per_tranches = (int) $config->get('tranche_duration');
@@ -120,8 +123,15 @@ class CalendarForm extends FormBase {
           ];
           $datetime_str = $parameters['date'] . ' ' . $parameters['hour'] . ':' . $parameters['min'] . ':00';
           $node = $this->getNodeReservation($tid, $datetime_str);
+          $block_hour = FALSE;
+          if (!empty($not_from) && !empty($not_to) && ($not_from <= $base_hour &&  $base_hour <= $not_to)) {
+            $block_hour = TRUE;
+          }
 
-          if ($node === FALSE) {
+          if ($block_hour) {
+            $class = 'noavailable';
+          }
+          elseif ($node === FALSE) {
             $class = 'available';
           }
           elseif ($node->field_status->first()->value == 'locked') {

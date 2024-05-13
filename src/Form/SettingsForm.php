@@ -132,6 +132,8 @@ class SettingsForm extends ConfigFormBase {
       ];
       $opening = $config->get('opening_time_' . $number);
       $closing = $config->get('closing_time_' . $number);
+      $not_from = $config->get('not_available_from_' . $number);
+      $not_to = $config->get('not_available_to_' . $number);
 
       $form['days-available']['box' . $number]['opening-time-' . $number] = [
         '#type' => 'number',
@@ -152,14 +154,14 @@ class SettingsForm extends ConfigFormBase {
         '#title' => $this->t('Not available from'),
         '#min' => 0,
         '#max' => 23,
-        '#default_value' => $closing ?? '',
+        '#default_value' => $not_from ?? '',
       ];
       $form['days-available']['box' . $number]['not-available-to-' . $number] = [
         '#type' => 'number',
         '#title' => $this->t('Not available to'),
         '#min' => 0,
         '#max' => 23,
-        '#default_value' => $closing ?? '',
+        '#default_value' => $not_to ?? '',
       ];
     }
 
@@ -196,10 +198,10 @@ class SettingsForm extends ConfigFormBase {
           if ($closing < $opening) {
             $form_state->setErrorByName('opening-time-' . $number, $this->t('The opening time must be less than the closing time.'));
           }
-          if (!empty($not_from) && ($not_from < $opening || $not_from > $opening)) {
+          if (!empty($not_from) && ($not_from < $opening || $not_from > $closing)) {
             $form_state->setErrorByName('not-available-from-' . $number, $this->t('The time from which it will not be available must be between the start and end time.'));
           }
-          if (!empty($not_to) && ($not_to < $opening || $not_to > $opening)) {
+          if (!empty($not_to) && ($not_to < $opening || $not_to > $closing)) {
             $form_state->setErrorByName('not-available-to-' . $number, $this->t('The time from which it will not be available must be between the start and end time.'));
           }
           if (!empty($not_to) && !empty($not_from) && ($not_to < $not_from)) {
