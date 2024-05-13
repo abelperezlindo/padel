@@ -1,0 +1,3 @@
+'permission to block reservation':
+  title: 'Block reservation paddle tennis courts'
+  description: 'Grant this permission to people who can block booking a court at different times.'

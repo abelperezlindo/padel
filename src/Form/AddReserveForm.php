@@ -57,6 +57,15 @@ class AddReserveForm extends ConfirmFormBase {
     $this->term = $term;
     $this->datetime = $datetime;
     $this->return = $return;
+    $can_blok = \Drupal::currentUser()->hasPermission('permission to block reservation');
+    if ($can_blok) {
+      $form['block-this'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Set as no available'),
+        '#attributes' => ['class' => ['']],
+        '#default_value' => 0,
+      ];
+    }
 
     return parent::buildForm($form, $form_state);
   }
@@ -85,10 +94,15 @@ class AddReserveForm extends ConfirmFormBase {
       return;
     }
 
+    $status = 'reserved';
+    if ($form_state->hasValue('block-this') && $form_state->getValue('block-this')) {
+      $status = 'locked';
+    }
+
     $node->set('field_date_and_time', $this->datetime->format('Y-m-d H:i:00'));
     $node->set('field_minutes', $duration);
     $node->set('field_padel_courts', ['target_id' => $this->term->tid->value]);
-    $node->set('field_status', 'reserved');
+    $node->set('field_status', $status);
     // Save the node.
     $node->save();
     $form_state->setRedirect($this->return, $params);

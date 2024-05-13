@@ -136,7 +136,7 @@ class CalendarForm extends FormBase {
           }
 
           if ($block_hour) {
-            $class = 'noavailable';
+            $class = 'locked';
           }
           elseif ($node === FALSE) {
             $class = 'available';
