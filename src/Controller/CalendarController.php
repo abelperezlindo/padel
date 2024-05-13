@@ -71,6 +71,9 @@ class CalendarController extends ControllerBase {
     ];
 
     if (empty($reserva) && !$block_hour) {
+      $content['body'] = [
+        '#markup' => $body,
+      ];
       $content['confirm-form'] = \Drupal::formBuilder()->getForm('Drupal\pistas_padel\Form\AddReserveForm', $pista, $datetime, $return);
     }
     else {
