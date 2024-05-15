@@ -88,6 +88,12 @@ class CalendarForm extends FormBase {
     $closing = (int) $config->get('closing_time_' . $dayOfWeek);
     $not_from = (int) $config->get('not_available_from_' . $dayOfWeek);
     $not_to = (int) $config->get('not_available_to_' . $dayOfWeek);
+    if (empty($not_from) && !empty($not_to)) {
+      $not_from = $opening;
+    }
+    elseif (!empty($not_from) && empty($not_to)) {
+      $not_to = $closing;
+    }
 
     $hours = -$opening + $closing;
 

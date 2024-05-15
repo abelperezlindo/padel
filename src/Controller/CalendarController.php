@@ -47,6 +47,13 @@ class CalendarController extends ControllerBase {
     $dayOfWeek = (int) $datetime->format('w');
     $not_from = (int) $config->get('not_available_from_' . $dayOfWeek);
     $not_to = (int) $config->get('not_available_to_' . $dayOfWeek);
+    if (empty($not_from) && !empty($not_to)) {
+      $not_from = (int) $config->get('opening_time_' . $dayOfWeek);
+    }
+    elseif (!empty($not_from) && empty($not_to)) {
+      $not_to = (int) $config->get('closing_time_' . $dayOfWeek);
+    }
+
     $block_hour = FALSE;
     $hour = (int) $datetime->format('H');
     if (!empty($not_from) && !empty($not_to) && ($not_from <= (int) $hour &&  $hour <= $not_to)) {
