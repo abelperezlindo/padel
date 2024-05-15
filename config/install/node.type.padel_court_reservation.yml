@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - pistas_padel
     - menu_ui
 third_party_settings:
   menu_ui:
