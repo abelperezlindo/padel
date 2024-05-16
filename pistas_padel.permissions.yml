@@ -1,3 +1,6 @@
 'permission to block reservation':
   title: 'Block reservation paddle tennis courts'
   description: 'Grant this permission to people who can block booking a court at different times.'
+'permission to reserve paddle tennis courts':
+  title: 'Booking paddle tennis courts'
+  description: 'Grant this permission to people who can booking a court at different times.'
