@@ -44,7 +44,6 @@ class CalendarForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config(static::SETTINGS);
     $date = new DrupalDateTime('now');
-    $request = \Drupal::request()->query->all();
     /** @var \Symfony\Component\HttpFoundation\ParameterBag */
     if ($form_state->getValue('selected-date')) {
       $date = $form_state->getValue('selected-date');
@@ -101,7 +100,7 @@ class CalendarForm extends FormBase {
     $time_tranches = 60 / $minutes_per_tranches;
     $courts = $this->getPadelCourts();
     $pistas_header = $courts->items;
-    array_unshift($pistas_header, " ");
+    array_unshift($pistas_header, "Hora");
     $base_hour = $opening;
 
     if (empty($courts->items)) {
@@ -117,15 +116,16 @@ class CalendarForm extends FormBase {
       $output = [];
       $base_minutes = 0;
       for ($x = 0; $x < $time_tranches; $x++) {
+        $hm = str_pad($base_hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($base_minutes, 2, '0', STR_PAD_LEFT);
         $output[$x] = [
           'tranches' => [
             'data' => [
-              '#markup' => $base_minutes,
+              '#markup' => '<span class="label-hm-padel">' . $hm . '</span>',
             ],
           ],
         ];
         foreach ($courts->items as $tid => $name) {
-          $empty_space = $this->t('&nbsp;&nbsp;&nbsp;&nbsp;');
+          $text_btn = $this->t('&nbsp;&nbsp;&nbsp;&nbsp;');
           // $court_state = $courts->states[$tid];
           $parameters = [
             'pista' => $tid,
@@ -143,35 +143,45 @@ class CalendarForm extends FormBase {
 
           if ($block_hour) {
             $class = 'locked';
+            $text_btn = 'Bloqueada';
           }
           elseif ($node === FALSE) {
             $class = 'available';
+            $text_btn = 'Disponible';
           }
           elseif ($node->field_status->first()->value == 'locked') {
             $class = 'locked';
+            $text_btn = 'Bloqueada';
           }
           else {
             $class = 'noavailable';
+            $text_btn = 'Reservada';
           }
 
           $options = [
             'attributes' => ['class' => ['use-ajax', 'base-reserve-btn', $class]],
           ];
 
-          $link = Link::createFromRoute($empty_space, 'pistas_padel.reserve', $parameters, $options);
+          $link = Link::createFromRoute($text_btn, 'pistas_padel.reserve', $parameters, $options);
 
           $output[$x][$tid]['data'] = $link;
         }
 
         $base_minutes = $base_minutes + $minutes_per_tranches;
       }
-
+      if ($i == 0) {
+        $table_class = "first-table-padel";
+      }
+      else {
+        $table_class = "no-first-table-padel";
+      }
       $form['calendar-box']['table-hour-' . $i] = [
         '#type' => 'table',
-        '#caption' => t('@h HS', ['@h' => $base_hour]),
+        //'#caption' => t('@h HS', ['@h' => $base_hour]),
         '#header' => $pistas_header,
         '#rows' => $output,
         '#empty' => t('No items found'),
+        '#attributes' => ['class' => [$table_class]],
       ];
       $base_hour++;
     }

@@ -1,14 +1,46 @@
+.no-first-table-padel thead{
+  visibility: hidden;
+}
+
 .base-reserve-btn {
-  padding: 7px 23px;
-  margin: 0;
+  padding: 10px 10px;
+  margin: 1;
+  color: white;
+  font-size: 10px;
+  width: 100%;
+  text-overflow: ellipsis;
   text-decoration: none;
 }
-.available {
-  background: green;
+.base-reserve-btn:hover,
+.base-reserve-btn:focus {
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  text-decoration: none;
+  color: #dfdede
 }
+.available {
+  background: #6ea236;
+}
+.available:hover,
+.available:focus {
+  background-color: #5c8d27;
+}
+
 .locked {
   background: gray;
 }
+.locked:hover,
+.locked:focus  {
+  background: rgb(68, 67, 67);
+}
+
 .noavailable {
-  background: yellow;
+  background: #c61b23;
+}
+.noavailable:hover,
+.noavailable:focus {
+  background: #9e1219;
+}
+
+.label-hm-padel{
+  font-size: 10px;
 }
